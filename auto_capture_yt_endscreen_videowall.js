@@ -89,20 +89,20 @@
     // window.getAllWalls().then(window.renderWalls);
   }
 
-  // --- Hook into video ending ---
-  function installListener() {
-    const video = d.querySelector("video");
-    if (!video) return;
-    if (!video.__wallHooked) {
-      video.__wallHooked = true;
-      video.addEventListener("ended", () => {
+  (function waitForPlayer() {
+    const player = d.querySelector("#movie_player");
+    if (!player || !player.addEventListener) {
+      setTimeout(waitForPlayer, 500);
+      return;
+    }
+
+    // this trigger is more robust than "video ended", coz youtube itself actually uses this event for inserting endscreen videowall
+    player.addEventListener("onStateChange", (state) => {
+      if (state === 0) {
         // Give YouTube a moment to render the wall
         setTimeout(captureWall, 1000);
-      });
-    }
-  }
-  // Re-check periodically in case SPA navigation swaps video elements
-  setInterval(installListener, 2000);
+      }
+    });
 })();
 
 
