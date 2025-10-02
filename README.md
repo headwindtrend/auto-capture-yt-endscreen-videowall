@@ -84,7 +84,7 @@ Older records are automatically deleted during cleanup.
 
   - Delete the database via DevTools → Application → IndexedDB
 
-  - Or run indexedDB.deleteDatabase("yt_endscreen_db") in the console
+  - Or run `indexedDB.deleteDatabase("yt_endscreen_db")` in the console
 
   - If issues persist, restart the browser and retry
 
@@ -93,6 +93,8 @@ Older records are automatically deleted during cleanup.
 ## 💡 Tip
 
 If necessary (for cases where only one of them is needed), you can easily split the script into two: one for capturing, and one for retrieval.
+
+**Note:** Please make sure each script, after the split, has its own "timestamp normalization factor" (for instance, `var timestamp_norfac = 5000;`), and they must be identical.
 
 ---
 
