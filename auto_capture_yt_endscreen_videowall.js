@@ -1,12 +1,13 @@
 (function() {
   const DB_NAME = "yt_endscreen_db";
-  const STORE_NAME = "walls";
+  const STORE_NAME = "walls5";
+  const timestamp_norfac = STORE_NAME.match(/(?<=.*?)[1-9]\d*$/).toString()*1000;
   const MAX_DAYS = 7;
 
   // --- IndexedDB setup ---
   function openDB() {
     return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, 1);
+      const req = indexedDB.open(DB_NAME, 2);
       req.onupgradeneeded = () => {
         const db = req.result;
         if (db.objectStoreNames.contains(STORE_NAME)) {
@@ -108,7 +109,8 @@
 
 (function () {
   const DB_NAME = "yt_endscreen_db";
-  const STORE_NAME = "walls";
+  const STORE_NAME = "walls5";
+  const timestamp_norfac = STORE_NAME.match(/(?<=.*?)[1-9]\d*$/).toString()*1000;
   const BATCH_SIZE = 5;
 
   let allWalls = [], currentIndex = 0;
@@ -131,7 +133,7 @@
       }
     }
 
-    const req = indexedDB.open(DB_NAME, 1);
+    const req = indexedDB.open(DB_NAME, 2);
     req.onsuccess = (e) => {
       const db = e.target.result;
       const tx = db.transaction(STORE_NAME, "readonly");
@@ -429,4 +431,3 @@
 
   window.toggleArchivedVideoWalls = toggleArchivedVideoWalls;
 })();
-var timestamp_norfac = 5000;
