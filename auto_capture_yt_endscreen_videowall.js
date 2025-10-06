@@ -317,8 +317,9 @@
       const thumb = document.createElement("img");
       const vid = new URLSearchParams(new URL(item.link).search).get("v");
       if (vid) {
-        thumb.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+        thumb.src = `https://i.ytimg.com/vi/${vid}/mqdefault.jpg`;
         thumb.alt = item.title;
+        thumb.loading = "lazy";
         Object.assign(thumb.style, {
           width: "100%",
           height: "auto",
