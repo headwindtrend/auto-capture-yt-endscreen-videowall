@@ -94,7 +94,76 @@ Older records are automatically deleted during cleanup.
 
 If necessary (for cases where only one of them is needed), you can easily split the script into two: one for capturing, and one for retrieval.
 
-**Note:** Please make sure each script, after the split, has its own "timestamp normalization factor" (for instance, `var timestamp_norfac = 5000;`), and they must be identical.
+~~**Note:** Please make sure each script, after the split, has its own "timestamp normalization factor" (for instance, `var timestamp_norfac = 5000;`), and they must be identical.~~
+
+---
+
+## 🛠️ IndexedDB Refactor Notes: Renaming Stores Without Breaking Things
+
+Either deleting it or converting it. And make sure you do either one of them before you deploy the new code.
+### To delete, execute this
+```js
+(function() {
+  const DB_NAME = "yt_endscreen_db";
+  const req = indexedDB.deleteDatabase(DB_NAME);
+
+  req.onsuccess = function() {
+    alert("✅ Database deleted successfully:", DB_NAME);
+  };
+
+  req.onerror = function(e) {
+    alert("❌ Failed to delete database:", e.target.error);
+  };
+
+  req.onblocked = function() {
+    alert("⚠️ Delete blocked. Close other tabs or reload.");
+  };
+})();
+```
+### To convert, execute this (change the version number to match the latest one if it's no longer `2` as stated)
+```js
+(function() {
+  const dbName = "yt_endscreen_db";
+  const oldStore = "walls";
+  const newStore = "walls5";
+  const newVersion = 2;
+
+  const request = indexedDB.open(dbName, newVersion);
+
+  request.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    const tx = event.target.transaction;
+
+    // Create new store if it doesn't exist
+    if (!db.objectStoreNames.contains(newStore)) {
+      const newObjStore = db.createObjectStore(newStore, { keyPath: ["timestamp", "videoId"] });
+
+      // Copy data from old store
+      if (db.objectStoreNames.contains(oldStore)) {
+        const oldObjStore = tx.objectStore(oldStore);
+        oldObjStore.getAll().onsuccess = function(e) {
+          const records = e.target.result;
+          for (const record of records) {
+            newObjStore.add(record);
+          }
+        };
+
+        // Delete old store
+        db.deleteObjectStore(oldStore);
+      }
+    }
+  };
+
+  request.onsuccess = function() {
+    alert("✅ Store renamed from 'walls' to 'walls5' in version 2.");
+    request.result.close();
+  };
+
+  request.onerror = function() {
+    alert("❌ Failed to open database:", request.error);
+  };
+})();
+```
 
 ---
 
