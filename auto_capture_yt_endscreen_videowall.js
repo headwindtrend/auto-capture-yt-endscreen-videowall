@@ -1,7 +1,7 @@
 (function() {
   const DB_NAME = "yt_endscreen_db";
   const STORE_NAME = "walls5";
-  const timestamp_norfac = STORE_NAME.match(/(?<=.*?)[1-9]\d*$/).toString()*1000;
+  const timestamp_norfac = parseInt(STORE_NAME.match(/[1-9]\d*$/)[0], 10) * 1000;
   const MAX_DAYS = 7;
 
   // --- IndexedDB setup ---
@@ -110,7 +110,7 @@
 (function () {
   const DB_NAME = "yt_endscreen_db";
   const STORE_NAME = "walls5";
-  const timestamp_norfac = STORE_NAME.match(/(?<=.*?)[1-9]\d*$/).toString()*1000;
+  const timestamp_norfac = parseInt(STORE_NAME.match(/[1-9]\d*$/)[0], 10) * 1000;
   const BATCH_SIZE = 5;
 
   let allWalls = [], currentIndex = 0;
