@@ -155,7 +155,7 @@ Either deleting it or converting it. And make sure you do either one of them bef
   };
 
   request.onsuccess = function() {
-    alert("✅ Store renamed from 'walls' to 'walls5' in version 2.");
+    alert(`✅ Store renamed from 'walls' to 'walls5' in version ${newVersion}.`);
     request.result.close();
   };
 
